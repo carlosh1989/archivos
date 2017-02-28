@@ -1,0 +1,34 @@
+@extends('layouts.admin')
+@section('content')
+.container
+	.card-panel
+		h4.blue-text Chat
+		.divider
+		table 
+			thead
+				tr
+					th Avatar
+					th Comisión
+					th Nombre
+					th Chat
+			tbody
+				@foreach($salas as $co)
+				@var('id',$co->id)
+				@var('avatar',$co->councilor->avatar)
+				@if(Auth::user()->email != $co->councilor->user->email)
+				tr
+					td
+						img(width="70" src="{{asset('storage/'.$avatar)}}", alt="")
+					td {{ucfirst($co->councilor->comision)}}
+					td {{$co->councilor->name}}
+					td
+						@if($co->siteID)
+						a(href="{{url('admin/chat/'.$id)}}")
+							i.fa.fa-commenting.fa-2x(aria-hidden="true")
+						@else
+						a(href="{{url('admin/chat/'.$id.'/edit')}}")
+							i.fa.fa-commenting.fa-2x.grey-text(aria-hidden="true")
+						@endif
+				@endif
+				@endforeach
+@endsection

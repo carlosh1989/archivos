@@ -1,0 +1,71 @@
+@extends('layouts.admin')
+@section('content')
+.container
+	br
+	.card-panel
+		h4.blue-text.center.animated.pulse Ingresar Archivo
+		.divider
+		br
+		form(action="{{url('/admin/archivos')}}", enctype='multipart/form-data', method='post')
+			{{csrf_field()}}
+			//-INPUT ARCHIVO 
+			.file-field.input-field
+				.btn
+					span Buscar
+					input(type="file", name="archivo")
+				.file-path-wrapper
+					input.file-path.validate(type="text", name="archivo", placeholder="Avatar")
+			@if ($errors->has('archivo'))
+			.card-panel.red.white-text.animated.bounceIn
+				{{ $errors->first('archivo') }}
+				i.fa.fa-exclamation.pull-right.fa-2x(aria-hidden="true")
+			@endif
+
+			.row
+				.input-field.col.s12
+					input.validate#name(type="text" name="name" value="{{old('name')}}")
+					label(for="name") Nombre
+			@if ($errors->has('name'))
+			.card-panel.red.white-text.animated.bounceIn
+				{{ $errors->first('name') }}
+				i.fa.fa-exclamation.pull-right.fa-2x(aria-hidden="true")
+			@endif
+
+			.input-field.col.s12
+				textarea#textarea1.materialize-textarea.validate(name="description", cols="30", rows="10", required) {{ old('description') }}
+				label(for="textarea1") Descripción
+			@if ($errors->has('description'))
+			.card-panel.red.white-text.animated.bounceIn
+				{{ $errors->first('description') }}
+				i.fa.fa-exclamation.pull-right.fa-2x(aria-hidden="true")
+			@endif
+
+			select.validate(name="type")
+				@if(old('type'))
+				option(value="{{old('type')}}") {{old('type')}}
+				option(value="word") Word
+				option(value="excel") Excel
+				option(value="point") Power Point
+				option(value="pdf") PDF
+				option(value="imagen") Imagen
+				@else
+				option(value="" disabled selected) Ingrese tipo de archivo
+				option(value="word") Word
+				option(value="excel") Excel
+				option(value="point") Power Point
+				option(value="pdf") PDF
+				option(value="imagen") Imagen
+				@endif
+
+			@if ($errors->has('type'))
+			.card-panel.red.white-text.animated.bounceIn
+				{{ $errors->first('type') }}
+				i.fa.fa-exclamation.pull-right.fa-2x(aria-hidden="true")
+			@endif
+
+			button.btn.btn-large(type="submit") Guardar
+
+
+@endsection
+
+

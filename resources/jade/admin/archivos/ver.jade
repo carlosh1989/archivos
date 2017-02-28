@@ -1,0 +1,48 @@
+@extends('layouts.admin')
+
+@section('content')
+.container
+	br
+	.card-panel
+		.row
+			.col.s6
+				h5.blue-text.center.animated.pulse Archivos
+			.col.s6
+				nav
+					.nav-wrapper.white
+						form(action="{{url('/admin/busquedaProcesar')}}" method="post")
+							{{csrf_field()}}
+							.input-field
+								input(type="search" name="search" id="searchArchivo" required)
+								label(for="searchArchivo")
+									i.material-icons.blue-text search
+								i.material-icons close
+		.divider
+		br
+		table
+			thead
+				tr.grey-text
+					th(data-field="nombre") Nombre
+					th(data-field="descripción") Visible
+					th(data-field="tipo") Tipo 
+					th(data-field="Opciones") Opciones
+			tbody
+				@foreach($resultados as $re)
+				tr
+					td {{$re->name}}
+					td Visible
+					td {{$re->type}}
+					td
+						@var("id",$re->id)
+						a(href="#" data-activates="fileoptions{{$id}}").dropdown-button.btn
+							i.fa.fa-cog
+						ul(id="fileoptions{{$id}}").dropdown-content
+							li: a(href="{{url('/admin/publicar/'.$id)}}") Publicar
+							li: a(href="#") Editar
+							.divider
+							li.red: a.white-text(href="#") Eliminar
+
+				@endforeach
+
+	{{ $resultados->links() }}
+@endsection

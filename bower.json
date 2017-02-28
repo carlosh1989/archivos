@@ -1,0 +1,21 @@
+{
+  "name": "archivos",
+  "description": "",
+  "main": "",
+  "authors": [
+    "carlos silva <elmorochez22@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/bower",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "animate.css": "^3.5.2"
+  }
+}

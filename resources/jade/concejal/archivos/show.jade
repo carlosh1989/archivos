@@ -1,0 +1,36 @@
+@extends('layouts.concejal')
+
+@section('content')
+.container
+	br
+	.card-panel
+		.row
+			.col.l2.s2
+				@var('tipo',$post->file->type)
+				@if($tipo == 'word')
+				i.fa.fa-file-word-o.fa-3x.blue-text(aria-hidden="true")
+				@endif
+
+				@if($tipo == 'excel')
+				i.fa.fa-file-excel-o.fa-3x.green-text(aria-hidden="true")
+				@endif
+
+				@if($tipo == 'pdf')
+				i.fa.fa-file-pdf-o.fa-3x.red-text(aria-hidden="true")
+				@endif
+
+				@if($tipo == 'point')
+				i.fa.fa-file-powerpoint-o.fa-3x.orange-text(aria-hidden="true")
+				@endif
+
+				@if($tipo == 'imagen')
+				i.fa.fa-file-image-o.fa-3x.purple-text(aria-hidden="true")
+				@endif
+			.col.l10.s10
+				h5.blue-text.animated.pulse {{$post->file->name}}
+		.divider
+		p {{$post->file->description}}
+		.divider
+		|<iframe src='https://view.officeapps.live.com/op/embed.aspx?src=http://img.labnol.org/di/PowerPoint.ppt' width='500px' height='350px' frameborder='0'></iframe>
+		|<object type="text/html" data="https://view.officeapps.live.com/op/embed.aspx?src=http://img.labnol.org/di/PowerPoint.ppt" width="400" height="400"> </object>
+@endsection

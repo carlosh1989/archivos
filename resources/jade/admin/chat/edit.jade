@@ -1,0 +1,18 @@
+@extends('layouts.admin')
+
+@section('content')
+.container
+	.card-panel
+		h4.blue-text Activar Chat
+		.divider
+		label.grey-text Ingrese ID de Tawk.to creado al concejal.
+		@var('siteID',$room->siteID)
+		@var('id',$room->id)
+		form(action="{{url('admin/chat/'.$id)}}" method="POST")
+			{{csrf_field()}}
+			input(type="hidden" name="_method" value="PUT")
+			input(type="text" ,name="siteID", placeholder="Ingrese ID", value="{{ old('email',$siteID) }}")
+			br
+			button(type="submit").btn.blue Enlazar 
+				i.fa.fa-link(aria-hidden="true") 
+@endsection

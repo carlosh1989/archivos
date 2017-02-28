@@ -1,0 +1,98 @@
+@extends('layouts.admin')
+
+@section('content')
+.container
+	br
+	.card-panel
+		.row
+			.col.l12.s12
+				h5.blue-text.center.animated.pulse Publicaciones
+		.divider
+		.row
+			.col.s12
+				table.responsive-table.highlight
+					thead
+						tr.grey-text
+							th(data-field="Tipo") Tipo
+							th(data-field="Nombre") Nombre
+							th(data-field="Clasificación") Clasificación
+							th(data-field="Fecha") Fecha
+							th(data-field="Opciones") Visto
+					tbody
+							@foreach($publicaciones as $re)
+							@var('councilor_id',$re->user->id)
+							input(type="hidden" value="{{$councilor_id}}" name="councilor_id")
+							tr
+								td
+									ul
+										li
+											@var('tipo','word')
+											@if($tipo == 'word')
+											i.fa.fa-file-word-o.fa-3x.blue-text(aria-hidden="true")
+											@endif
+
+											@if($tipo == 'excel')
+											i.fa.fa-file-excel-o.fa-3x.green-text(aria-hidden="true")
+											@endif
+
+											@if($tipo == 'pdf')
+											i.fa.fa-file-pdf-o.fa-3x.red-text(aria-hidden="true")
+											@endif
+
+											@if($tipo == 'point')
+											i.fa.fa-file-powerpoint-o.fa-3x.orange-text(aria-hidden="true")
+											@endif
+
+											@if($tipo == 'imagen')
+											i.fa.fa-file-image-o.fa-3x.purple-text(aria-hidden="true")
+											@endif
+
+								td {{ucwords(strtolower($re->file->name))}}
+								td {{$re->clasificacion}}
+								@var('date',new Date($re->created_at))
+								td {{$date->format('d-m-Y')}}
+								td
+									@var('PublicID', url('/admin/publicaciones/'.$re->id))
+									a(href="{{$PublicID}}")
+										i.fa.fa-eye.fa-3x
+							@endforeach
+							
+	
+
+
+	{{ $publicaciones->links() }}
+
+
+script(type='text/javascript').
+	(function($){
+	$(function(){
+
+	window.onload = function() {
+	document.getElementById('searchGo').onclick = function() {
+	document.getElementById('searchForm').submit();
+	return false;
+	};
+	};
+	$('.modal-trigger').leanModal();
+	$('#searchConcejal').focus(function(){
+	$(this).val('');
+	});
+
+	$('#borrarSearch').click(function(){
+	$('#searchConcejal').val('');
+	});
+
+	$('input.autocomplete').autocomplete({
+	data: {
+	@foreach($publicaciones as $re)
+	"{{$re->comision}}" : null,
+	"{{$re->name}} {{$re->comision}}": "{{asset('storage/'.$re->avatar)}}",
+	@endforeach
+	}
+	});
+	}); // end of document ready
+	})(jQuery); // end of jQuery name space
+
+
+
+@endsection

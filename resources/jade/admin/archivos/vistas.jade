@@ -1,0 +1,89 @@
+@extends('layouts.admin')
+
+@section('content')
+.container
+	br
+	.card-panel
+		.row
+			.col.l12.s12
+				h5.blue-text.center.animated.pulse Publicaciones
+		.divider
+		.row 
+			.col.s12
+				ul.tabs
+					li.tab.col.s3.teal-text
+						a.green-text(href="#vistos") Vistos: {{$publicacionesVistas->count()}} 
+							i.fa.fa-check(aria-hidden="true")
+					li.tab.col.s3
+						a.active.red-text(href="#novistos") No vistos: {{$publicacionesNoVistas->count()}} 
+							i.fa.fa-times(aria-hidden="true")
+			.col.s12#vistos
+				table
+					thead
+						tr.grey-text
+							th(data-field="Avatar") Avatar
+							th(data-field="Nombre") Nombre
+							th(data-field="Rol") Rol
+							th(data-field="Comisión") Comisión
+							th(data-field="Visto") Visto
+					tbody
+						@foreach($publicacionesVistas as $post)
+						tr
+							@var('avatar',$post->councilor->avatar)
+							td
+								img.materialboxed(width="70" src="{{asset('storage/'.$avatar)}}")
+							td {{$post->councilor->name}}
+							td {{$post->councilor->user->role}}
+							td {{$post->councilor->comision}}
+							@var('date',new Date($post->update_at))
+							td {{$date->format('j-m-Y')}} a las {{$date->format('H:i:s')}}
+						@endforeach
+			.col.s12#novistos
+				table
+					thead
+						tr.grey-text
+							th(data-field="Avatar") Avatar
+							th(data-field="Nombre") Nombre
+							th(data-field="Rol") Rol
+							th(data-field="Comisión") Comisión
+					tbody
+						@foreach($publicacionesNoVistas as $post)
+						tr
+							@var('avatar',$post->councilor->avatar)
+							td
+								img.materialboxed(width="70" src="{{asset('storage/'.$avatar)}}")
+							td {{$post->councilor->name}}
+							td {{$post->councilor->user->role}}
+							td {{$post->councilor->comision}}
+						@endforeach
+
+
+script(type='text/javascript').
+	(function($){
+	$(function(){
+
+	window.onload = function() {
+	document.getElementById('searchGo').onclick = function() {
+	document.getElementById('searchForm').submit();
+	return false;
+	};
+	};
+	$('.modal-trigger').leanModal();
+	$('#searchConcejal').focus(function(){
+	$(this).val('');
+	});
+
+	$(document).ready(function(){
+	$('ul.tabs').tabs('select_tab', 'tab_id');
+	});
+        
+	$('#borrarSearch').click(function(){
+	$('#searchConcejal').val('');
+	});
+
+	}); // end of document ready
+	})(jQuery); // end of jQuery name space
+
+
+
+@endsection

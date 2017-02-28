@@ -1,0 +1,14 @@
+{
+  "name": "pusher.min",
+  "_cacheHeaders": {
+    "ETag": "W/\"48abbe940ed147bf48e2398130eb7028\"",
+    "Last-Modified": "Wed, 03 Aug 2016 09:31:43 GMT",
+    "Content-Type": "application/javascript"
+  },
+  "_release": "e-tag:W/\"48abbe9",
+  "main": "index.js",
+  "_source": "https://js.pusher.com/3.2/pusher.min.js",
+  "_target": "*",
+  "_originalSource": "https://js.pusher.com/3.2/pusher.min.js",
+  "_direct": true
+}

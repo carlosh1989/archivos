@@ -1,0 +1,145 @@
+@extends('layouts.admin')
+
+@section('content')
+
+.container
+	br
+	.card-panel
+		h4.blue-text Cuentas
+		.divider
+		br
+		form(action="{{url('/admin/cuentas')}}", enctype='multipart/form-data', method='post')
+			{{csrf_field()}}
+			//-INPUT ARCHIVO 
+			.file-field.input-field
+				.btn
+					span Buscar
+					input(type="file", name="archivo", required)
+				.file-path-wrapper
+					input.file-path.validate(type="text", name="archivo", placeholder="Avatar", required)
+				.file-path-wrapper
+			@if ($errors->has('archivo'))
+			.card-panel.red.white-text.animated.bounceIn
+				{{ $errors->first('archivo') }}
+				i.fa.fa-exclamation.pull-right.fa-2x(aria-hidden="true")
+			@endif
+			//-FORMULARIO DEL LOGIN
+			input(type="text" ,name="name", placeholder="Ingrese nombre", value="{{ old('name') }}" required)
+			@if ($errors->has('name'))
+			.card-panel.red.white-text.animated.bounceIn
+				{{ $errors->first('name') }}
+				i.fa.fa-exclamation.pull-right.fa-2x(aria-hidden="true")
+			@endif
+			input(type="text" ,name="email", placeholder="Ingrese email", value="{{ old('email') }}")
+			@if ($errors->has('email'))
+			.card-panel.red.white-text.animated.bounceIn
+				{{ $errors->first('email') }}
+				i.fa.fa-exclamation.pull-right.fa-2x(aria-hidden="true")
+			@endif
+			input(type="password", name="password", placeholder="Ingrese clave", value="{{ old('password') }}" required)
+			@if ($errors->has('password'))
+			.card-panel.red.white-text.animated.bounceIn
+				{{ $errors->first('password') }}
+				i.fa.fa-exclamation.pull-right.fa-2x(aria-hidden="true")
+			@endif
+			select(name="role", required)
+				@if(old('role'))
+				option(value="{{old('role')}}") {{old('role')}} 
+				option(value="concejal") Concejal
+				option(value="asistente") Asistente
+				option(value="admin") Admin
+				{{old('role')}}
+				@else
+				option(value="" disabled selected) Ingrese Role 
+				option(value="concejal") Concejal
+				option(value="asistente") Asistente
+				option(value="admin") Admin
+				@endif
+			@if ($errors->has('role'))
+			.card-panel.red.white-text.animated.bounceIn
+				{{ $errors->first('role') }}
+				i.fa.fa-exclamation.pull-right.fa-2x(aria-hidden="true")
+			@endif
+			
+			//-FORMULARIO DE REGISTRO
+			input(type="number" ,name="cedula", placeholder="Cedula", value="{{ old('cedula') }}" required)
+			@if ($errors->has('cedula'))
+			.card-panel.red.white-text.animated.bounceIn
+				{{ $errors->first('cedula') }}
+				i.fa.fa-exclamation.pull-right.fa-2x(aria-hidden="true")
+			@endif
+
+			input(type="number", name="telefono" placeholder="Celular", value="{{ old('telefono') }}" required)
+			@if ($errors->has('telefono'))
+			.card-panel.red.white-text.animated.bounceIn
+				{{ $errors->first('telefono') }}
+				i.fa.fa-exclamation.pull-right.fa-2x(aria-hidden="true")
+			@endif
+
+			select(name="comision", required)
+				@if(old('comision'))
+				option(value="{{old('comision')}}") {{old('comision')}}
+				option(value="transporte") Transporte
+				option(value="salud") Salud
+				option(value="educacion") Educación
+				option(value="finanza") Finanza
+				option(value="urbanismo") Urbanismo
+				option(value="legislacion") Legislación
+				option(value="contraloria") Contraloria
+				option(value="egidos") Egidos
+				option(value="ambiente") Ambiente
+				option(value="pciudadana") Participación Ciudadana
+				@else
+				option(value="" disabled selected) Ingrese Comisión
+				option(value="transporte") Transporte
+				option(value="salud") Salud
+				option(value="educacion") Educación
+				option(value="finanza") Finanza
+				option(value="urbanismo") Urbanismo
+				option(value="legislacion") Legislación
+				option(value="contraloria") Contraloria
+				option(value="egidos") Egidos
+				option(value="ambiente") Ambiente
+				option(value="pciudadana") Participación Ciudadana
+				@endif
+			@if ($errors->has('comision'))
+			.card-panel.red.white-text.animated.bounceIn
+				{{ $errors->first('comision') }}
+				i.fa.fa-exclamation.pull-right.fa-2x(aria-hidden="true")
+			@endif
+
+			.input-field.col.s12
+				textarea#textarea1.materialize-textarea(name="direccion", cols="30", rows="10", required) {{ old('direccion') }}
+				label(for="textarea1") Descripción
+			@if ($errors->has('direccion'))
+			.card-panel.red.white-text.animated.bounceIn
+				{{ $errors->first('direccion') }}
+				i.fa.fa-exclamation.pull-right.fa-2x(aria-hidden="true")
+			@endif
+
+			select(name="parroquia" required)
+				@if(old('parroquia'))
+				option(value="{{ old('parroquia') }}") {{ old('parroquia') }} 
+				option(value="ramon ignacion mendez") Ramon ignacio Mendez
+				option(value="conrazon de jesus") Corazon de Jesus
+				@else
+				option(value="" disabled selected) Ingrese parroquia
+				option(value="ramon ignacion mendez") Ramon ignacio Mendez
+				option(value="conrazon de jesus") Corazon de Jesus
+				@endif
+			@if ($errors->has('parroquia'))
+			.card-panel.red.white-text.animated.bounceIn
+				{{ $errors->first('parroquia') }}
+				i.fa.fa-exclamation.pull-right.fa-2x(aria-hidden="true")
+			@endif
+
+			input.datepicker(type="date", name="nacimiento", placeholder="Fecha de nacimiento", value="{{ old('nacimiento') }}" required)
+			@if ($errors->has('nacimiento'))
+			.card-panel.red.white-text.animated.bounceIn
+				{{ $errors->first('nacimiento') }}
+				i.fa.fa-exclamation.pull-right.fa-2x(aria-hidden="true")
+			@endif
+
+			button.btn.waves-effect.waves-light(type="submit", name="action") Guardar 
+				i.fa.fa-wpforms(aria-hidden='true')
+@endsection

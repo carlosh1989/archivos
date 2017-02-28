@@ -1,0 +1,27 @@
+@extends('layouts.admin')
+
+@section('content')
+
+style.
+	.btn-block{
+		width:100%;
+	}
+.container
+	br
+	.card-panel
+		h4.blue-text.animated.pulse.infinite.center FORM
+		br
+		form(action="{{url('/admin/cuentas/form')}}", method="post")
+			{{csrf_field()}}
+			input(type="text" name="name" value="{{old('name')}}" placeholder="Ingrese Nombre")
+			@if ($errors->has('name'))
+			.card-panel.red.white-text.animated.bounceIn
+				{{ $errors->first('name') }}
+				i.fa.fa-exclamation.pull-right.fa-2x(aria-hidden="true")
+			@endif
+			.row
+				.col.s12.push-s10
+					button.btn.btn-large.blue.waves-effect.waves-light(type="submit", name="action")  
+						i.fa.fa-save(aria-hidden='true')
+
+@endsection

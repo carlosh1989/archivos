@@ -1,0 +1,175 @@
+@extends('layouts.admin')
+
+@section('content')
+.container
+	br
+	.card-panel
+		.row
+			.col.l6.s12
+				h5.blue-text.center.animated.pulse {{ucfirst($archivo->name)}}
+			.col.l6.s12
+				nav(style="z-index:888;")
+					.nav-wrapper.white
+						form#searchForm(action="{{url('/admin/busquedaProcesarPublicar')}}" method="post")
+							{{csrf_field()}}
+							.input-field
+								@var('idArchivo',$archivo->id)
+								input(type="hidden" value="{{$idArchivo}}" name="idArchivo")
+								input.autocomplete.grey-text(type="search" , name="search" id="searchConcejal" , autocomplete="off" required)
+								label(for="searchConcejal")
+									@if($search == "si")
+									@var('urlAtras',url('/admin/publicar/'.$idArchivo))
+									a(href="{{$urlAtras}}").blue-text
+										i.fa.fa-chevron-left.fa-2x.blue-text
+									@else
+									@var('submitEnter','this.form.submit()')
+									a#searchGo(href="#" onClick="{{$submitEnter}}").blue-text
+										i.fa.fa-search.fa-2x.blue-text
+									@endif
+								i.material-icons#borrarSearch close
+		.divider
+		.row
+			.col.s12
+				table.responsive-table.highlight
+					thead
+						tr.grey-text
+							th(data-field="Avatar")
+							th(data-field="Nombre") Nombre
+							th(data-field="Role") Role
+							th(data-field="Cargo") Comisión
+							th(data-field="Telefono") Telefono
+							th(data-field="Cedula") Cedula
+					tbody
+						tr
+						form(action="{{url('/admin/publicar')}}" method="post")
+							{{csrf_field()}}
+							select(name="elejir_comida" ,onchange="mostrarValor(this.options[this.selectedIndex].innerHTML); mostrarValor2(this.value);")
+								option(value="ordenanza") Ordenanza
+								option(value="memorandum") Memorandum
+								option(value="oficio") Oficio
+								option(value="acuerdo") Acuerdo
+
+							input(type="hidden" name="clasificacion" id="comida")
+
+							script(type='text/javascript').
+								var mostrarValor = function(x){
+								document.getElementById('comida').value=x;
+								}
+
+								var mostrarValor2 = function(x){
+								document.getElementById('comida2').value=x;
+								}
+							@if ($errors->has('clasificacion'))
+							.card-panel.red.white-text.animated.bounceIn
+								{{ $errors->first('clasificacion') }}
+								i.fa.fa-exclamation.pull-right.fa-2x(aria-hidden="true")
+							@endif
+							@var('idArchivo',$archivo->id)
+							input(type="hidden" name="file_id" value="{{$idArchivo}}")
+							@foreach($usuarios as $re)
+							@var('councilor_id',$re->user->id)
+							input(type="hidden" value="{{$councilor_id}}" name="councilor_id")
+							tr
+
+								td.center-align
+									ul
+										li
+											@var('avatar',$re->avatar)
+											@var("userId",$re->user->id)
+											input.filled-in(type="checkbox" name="concejales[]" value="{{$userId}}" id="check{{$userId}}")
+											label(for="check{{$userId}}")
+												img(width="70" src="{{asset('storage/'.$avatar)}}", alt="")
+								td {{ucwords(strtolower($re->name))}}
+								td {{$re->user->role}}
+								td {{$re->comision}}
+								td {{$re->telefono}}
+								td {{$re->cedula}}
+							@endforeach
+							
+							.fixed-action-btn(style="bottom: 120px; right: 24px;")
+								a#selectComi.btn-floating.btn-large.red.tooltipped.modal-trigger(href="#modalSelectComi" data-position="top" data-delay="50" data-tooltip="Seleccionar comisión")
+									i.large.material-icons mode_edit
+
+							.modal.bottom-sheet#modalSelectComi
+								.modal-content
+									h5.blue-text.center Seleccionar Comisiones
+									.divider
+									br
+									.row
+										.col.l10.s12
+											.col.l2.s12
+												input.filled-in(type="checkbox" name="comision[]" value="transporte" id="checkTransporte")
+												label(for="checkTransporte") Transporte
+											.col.l2.s12
+												input.filled-in(type="checkbox" name="comision[]" value="salud" id="checkSalud")
+												label(for="checkSalud") Salud
+											.col.l2.s12
+												input.filled-in(type="checkbox" name="comision[]" value="finanza" id="checkFinanza")
+												label(for="checkFinanza") Finanza
+											.col.l2.s12
+												input.filled-in(type="checkbox" name="comision[]" value="legislacion" id="checkLegislacion")
+												label(for="checkLegislacion") Legislación
+										.col.l2.s12
+											button(type="submit" href="#").btn.btn-large.teal.waves-effect.waves-light Publicar 
+												i.fa.fa-send.fa-2x
+
+							.fixed-action-btn.tooltipped(data-position="left" data-delay="50" data-tooltip="Publicar Archivo" style="bottom: 45px; right: 24px;")
+								button(type="submit").btn-floating.btn-large.teal(href="#")
+									i.large.material-icons send
+
+	{{ $usuarios->links() }}
+
+
+script(type='text/javascript').
+	(function($){
+	$(function(){
+
+	window.onload = function() {
+	document.getElementById('searchGo').onclick = function() {
+	document.getElementById('searchForm').submit();
+	return false;
+	};
+	};
+	$('.modal-trigger').leanModal();
+	$('#searchConcejal').focus(function(){
+	$(this).val('');
+	});
+
+	$('#borrarSearch').click(function(){
+	$('#searchConcejal').val('');
+	});
+	var mostrarValor = function(x){
+	document.getElementById('comida').value=x;
+	}
+
+	var mostrarValor2 = function(x){
+	document.getElementById('comida2').value=x;
+	}
+
+	$('input.autocomplete').autocomplete({
+	data: {
+	@foreach($todos as $re)
+	"{{$re->comision}}" : null,
+	"{{$re->name}} {{$re->comision}}": "{{asset('storage/'.$re->avatar)}}",
+	@endforeach
+	}
+	});
+
+
+	$('input.autocompleteClasificacion').autocomplete({
+	data: {
+	@foreach($todos as $re)
+	"memorandun" : null,
+	"oficio": null,
+	"ordenanza": null,
+	"acuerdos": null,
+	@endforeach
+	}
+	});
+
+	}); // end of document ready
+	})(jQuery); // end of jQuery name space
+
+
+
+@endsection
